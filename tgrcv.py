@@ -32,6 +32,7 @@ params = {'offset': 0, 'limit': 1, 'timeout': timeout}
 response = r.get(TELEGRAM_API_URL + 'getUpdates', params=params)
 
 response_json = response.json()
+update_id = 0
 
 try:
     update_id = response_json['result'][0]['update_id']
