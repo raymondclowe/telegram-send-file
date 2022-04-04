@@ -7,6 +7,7 @@
 
 import sys
 import os
+from matplotlib.pyplot import text
 
 import requests
 
@@ -16,9 +17,9 @@ from secrets import TG_TOKEN
 
   
 
-# if there are not two arguments then error and exit
-if len(sys.argv) != 3:
-    print("Usage: tgsnd.py <username> <filename>")
+# length of arguments must be in the range 2-3
+if len(sys.argv) < 2 or len(sys.argv) > 3:
+    print("Usage: tgsnd.py <username> <filename>\n or \n Usage: tgsnd.py <username> read from stdin")
     sys.exit(1)
 
 #first arguments is the username
@@ -29,20 +30,35 @@ if username not in users:
     print("Unknown user")
     sys.exit(1)
 
-# second argument is the filename
-filename = sys.argv[2]
-
-# if filename doesn't exist
-if not os.path.isfile(filename):
-    print("File not found")
-    sys.exit(1)
-
-files = {'document': open(filename, 'rb')}
-url = 'https://api.telegram.org/bot{}/sendDocument?chat_id={}'.format(TG_TOKEN, users[username])
-r = requests.post(url=url, files= files)
+# second argument is the filename or absent and then this is stdin
+if len(sys.argv) == 3:
+    filename = sys.argv[2]
+    # if filename doesn't exist
+    if not os.path.isfile(filename):
+        print("File not found")
+        sys.exit(1)
+    
+    files = {'document': open(filename, 'rb')}
 
 
-if r.status_code == 200:
-    print("File sent")
-else:
-    print("File not sent - error : {}".format(r.text))
+    url = 'https://api.telegram.org/bot{}/sendDocument?chat_id={}'.format(TG_TOKEN, users[username])
+    r = requests.post(url=url, files= files)
+
+
+    if r.status_code == 200:
+        print("File sent")
+    else:
+        print("File not sent - error : {}".format(r.text))
+
+
+else: # read from stdin
+    text = sys.stdin.read()
+    url = 'https://api.telegram.org/bot{}/sendMessage?chat_id={}'.format(TG_TOKEN, users[username])
+    r = requests.post(url=url, data={'text': text})
+
+
+    if r.status_code == 200:
+        print("Text sent")
+    else:
+        print("Text not sent - error : {}".format(r.text))
+
