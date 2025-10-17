@@ -118,7 +118,7 @@ python tgrcv.py dummy --wait
 python tgrcv.py dummy -w
 ```
 
-Note: The first parameter is a placeholder (not used by the script, but required for the --wait/-w flag to be in the correct position).
+Note: The first parameter (e.g., "dummy") is required but not used by the script. The script checks for --wait/-w as the second argument (sys.argv[2]).
 
 ## Example Workflows
 
