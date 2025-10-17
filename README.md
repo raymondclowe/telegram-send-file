@@ -113,10 +113,12 @@ python tgrcv.py
 **Wait mode** - Keep the connection open and wait for new messages (up to 60 seconds):
 
 ```bash
-python tgrcv.py username --wait
+python tgrcv.py dummy --wait
 # or
-python tgrcv.py username -w
+python tgrcv.py dummy -w
 ```
+
+Note: The first parameter is a placeholder (not used by the script, but required for the --wait/-w flag to be in the correct position).
 
 ## Example Workflows
 
@@ -142,7 +144,7 @@ python your_script.py && echo "Script completed successfully!" | python tgsnd.py
 ```bash
 # Poll for messages
 while true; do
-    python tgrcv.py admin --wait
+    python tgrcv.py dummy --wait
     sleep 5
 done
 ```
